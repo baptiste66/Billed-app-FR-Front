@@ -47,45 +47,38 @@ describe("Given I am connected as an employee", () => {
           /^(19|20)\d\d[- /.](0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])$/i
         )
         .map(a => a.innerHTML)
-      const antiChrono = (a, b) => (b - a)
+        const antiChrono = (a, b) => ((a < b) ? 1 : -1)
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
+    describe("When I click on new bills", () => {
+      test("then we should navigate on the new bill page ", async () => {
+          Object.defineProperty(window, "localStorage", {
+              value: localStorageMock,
+          });
 
-    describe("When I click on New Bill Button", () => {
-      test("Then I should be sent on New Bill form", () => {
-        const onNavigate = pathname => {
-          document.body.innerHTML = ROUTES({ pathname })
-        }
+          window.localStorage.setItem(
+              "user",
+              JSON.stringify({
+                  type: "Employee",
+              })
+          );
 
-        Object.defineProperty(window, "localStorage", {
-          value: localStorageMock,
-        })
-        window.localStorage.setItem(
-          "user",
-          JSON.stringify({
-            type: "Employee",
-          })
-        )
-        const bills = new Bills({
-          document,
-          onNavigate,
-          store: mockedStore,
-          localStorage: window.localStorage,
-        })
+          const root = document.createElement("div");
+          root.setAttribute("id", "root");
+          document.body.append(root);
+          router();
+          window.onNavigate(ROUTES_PATH.Bills);
 
-        document.body.innerHTML = BillsUI({ data: bills })
+          let newBillButton = screen.getByTestId("btn-new-bill");
 
-        const buttonNewBill = screen.getByRole("button", {
-          name: /nouvelle note de frais/i,
-        })
-        expect(buttonNewBill).toBeTruthy()
-        const handleClickNewBill = jest.fn(bills.handleClickNewBill)
-        buttonNewBill.addEventListener("click", handleClickNewBill)
-        userEvent.click(buttonNewBill)
-        expect(handleClickNewBill).toHaveBeenCalled()
-      })
-    })
+          await userEvent.click(newBillButton);
+
+          let newBillForm = screen.getByTestId("form-new-bill");
+
+          expect(newBillForm).toBeTruthy();
+      });
+  });
 
     describe("When I click on one eye icon", () => {
       test("Then a modal should open", async () => {

@@ -18,10 +18,20 @@ const row = (bill) => {
     </tr>
     `)
   }
-
-const rows = (data) => {
-  return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
-}
+// bug order
+  const rows = (data) => {
+    if (data) {
+        return data
+            .sort((bill1, bill2) => {
+                return new Date(bill2.date) - new Date(bill1.date);
+            })
+            .map((bill) => row(bill))
+            .join("");
+    } else {
+        return "";
+    }
+    // return data && data.length ? data.map((bill) => row(bill)).join("") : "";
+};
 
 export default ({ data: bills, loading, error }) => {
   
