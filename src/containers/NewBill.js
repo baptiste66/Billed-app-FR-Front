@@ -24,7 +24,7 @@ export default class NewBill {
         const filePath = e.target.value.split(/\\/g);
         const fileName = filePath[filePath.length - 1];
 
-        //verification de l'extesion du fichier [Bug Hunt] - Bills
+        //bud login
         const extension = fileName.split(".").pop();
         switch (extension) {
             case "jpg":
