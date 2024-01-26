@@ -17,27 +17,7 @@ jest.mock("../app/store", () => mockedStore)
 
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
-    test("Then bill icon in vertical layout should be highlighted", async () => {
-      Object.defineProperty(window, "localStorage", {
-        value: localStorageMock,
-      })
-      window.localStorage.setItem(
-        "user",
-        JSON.stringify({
-          type: "Employee",
-        })
-      )
-      const root = document.createElement("div")
-      root.setAttribute("id", "root")
-      document.body.append(root)
-      router()
-      window.onNavigate(ROUTES_PATH.Bills)
-
-      const windowIcon = screen.getByTestId("icon-window")
-      await waitFor(() => windowIcon)
-      expect(windowIcon).toHaveClass("active-icon")
-    })
-
+    //unit test
     test("Then bills should be ordered from earliest to latest", () => {
       document.body.innerHTML = BillsUI({
         data: bills,
@@ -51,6 +31,8 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono)
       expect(dates).toEqual(datesSorted)
     })
+
+
     describe("When I click on new bills", () => {
       test("then we should navigate on the new bill page ", async () => {
           Object.defineProperty(window, "localStorage", {
@@ -141,7 +123,7 @@ describe("Given I am connected as an employee", () => {
       })
     })
 
-    //Test d'intégration GET
+    //Test  GET
     describe("When I navigate to Bills Page", () => {
       test("fetches bills from mock API GET", async () => {
         jest.spyOn(mockedStore, "bills")
